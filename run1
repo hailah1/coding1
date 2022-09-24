@@ -1,0 +1,30 @@
+  public void run() {
+
+        try {
+
+            ///Code for the server operations
+            System.out.println("Client Connected !");
+            InputStream in = socket.getInputStream();
+            OutputStream out = socket.getOutputStream();
+
+            byte[] buffer = new byte[1024];
+
+            //Read encrypted Data from client over input stream..
+            in.read(buffer);
+
+            String request = decrypt(new String(buffer).trim());//decrypt message request from client
+            System.out.println("received from Client: " + request);
+
+            String result;//send encrypted result..
+            result = encrypt(getInfo(request));
+
+            //Send message to client from server
+            out.write(result.getBytes());
+
+            //Close Soclet with client..
+            socket.close();
+        }//end try
+        catch (IOException ex) {
+
+            System.err.println("I/O Ecxception..");
+        }//end catch
